@@ -1,0 +1,7 @@
+INFO:root:Input test
+INFO:root:Input test
+ERROR:root:error test
+CRITICAL:root:critical test
+INFO:root:Input test
+ERROR:root:error test
+CRITICAL:root:critical test
