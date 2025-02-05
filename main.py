@@ -4,15 +4,6 @@ from server import Server
 from router import Router
 from http.response_writer import *
 
-
-"""
-    Todo:
-        - Add Apache style logger
-        - Handle Errors
-            * Error page
-"""
-
-
 def index(w: ResponseWriter):
     return w.writeHtml("index", OK)
     
