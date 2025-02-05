@@ -7,6 +7,8 @@ class HeaderBuilder:
     http_version: str
     header_lines: list[str]
     line_end: str 
+    status_line: str
+    conent_length: str
 
     def __init__(self):
         self.header_lines = []
@@ -14,7 +16,8 @@ class HeaderBuilder:
         self.line_end = "\r\n"
 
     def set_status_code(self, status_code: int):
-        line = f"{self.http_version} {format_status_code(status_code)}"
+        self.status_line = format_status_code(status_code)
+        line = f"{self.http_version} {self.status_line}"
         self.header_lines.append(line)
         
     def set_content_type(self, content_type: str):
@@ -23,6 +26,7 @@ class HeaderBuilder:
         
     def set_content_length(self, content_length: str):
         line = f"Content-Length: {content_length}"
+        self.conent_length = content_length
         self.header_lines.append(line)
 
 
@@ -57,16 +61,16 @@ class ResponseWriter:
         response = header_response + content
         return response
     
-    def writeHtml(self, html_file: str, status_code: int):
+    def writeHtml(self, html_file: str, status_code: int) -> tuple[str, str, str]:
         body = self.html_loader.html(html_file)
         self.header.set_status_code(status_code) 
-        self.header.set_content_length(len(body))
+        self.header.set_content_length(str(len(body)))
         self.header.set_content_type("text/html ISO-8859-1")
         
         header_response = self.header.write_header()
 
         response = header_response + body
-        return response
+        return response, self.header.status_line, self.header.conent_length
 
 
 

@@ -19,3 +19,4 @@ __pycache__/*
 *.pyc
 __pycache__/server.cpython-313.pyc
 http/__pycache__/response_writer.cpython-313.pyc
+http-server.log

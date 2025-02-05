@@ -21,16 +21,18 @@ class TrafficLogger(metaclass=SingleTonMeta):
 
         :param p1: sets the filename of of the desired log.
         """
+
         if self._logger == None:
-            format_string = '%(client_ip)s - - [%(asctime)s +0000] "%(method)s %(url)s HTTP/1.1" %(status)s %(size)s'
+            format_string = '%(client_ip)s - - [%(asctime)s +0000] "%(method)s %(url)s HTTP/1.1" %(http_status)s %(response_size)s'
             apache_format = Formatter(format_string, "%d/%b/%Y:%H:%M:%S")
             self._logger = logging.getLogger("traffic")
+            self._logger.setLevel(logging.INFO)
             file_handler = logging.FileHandler(filename)
             file_handler.setFormatter(apache_format)
             if not self._logger.hasHandlers():
                 self._logger.addHandler(file_handler)
 
-    def log(self, client_ip: str, http_method: str, request_uri: str, status_msg: str, size: str, level=logging.INFO):
+    def logTraffic(self, client_ip: str, http_method: str, request_uri: str, status_msg: str, size: str, level=logging.INFO):
         """
         logs outgoing server traffic.
         If the logger is not setup, it will setup before logging.
@@ -42,19 +44,23 @@ class TrafficLogger(metaclass=SingleTonMeta):
         :param p5: Size of the payload - string
         :param p5: level of the logging value. Default to logging.INFO - int
         """
-
-
-        if not self._logger:
+        
+        
+        if self._logger == None:
+             print("Logger is none, setting up logger...")
              self.Setup()
-        info = {
+             print(f"Logger is set: {self._logger}")
+
+        d = {
             "client_ip": client_ip,
             "method": http_method,
             "url": request_uri,
-            "status": status_msg,
-            "size": size
+            "http_status": status_msg,
+            "response_size": size
         }
 
-        self._logger.log(level=level, msg="", extra=info) 
+        print(f"is info set: {d}")
+        self._logger.log(level=level, msg="", extra=d) 
         
 
 

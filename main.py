@@ -24,7 +24,8 @@ def main():
     router.GET("/", index)
     router.GET("/about", about)
 
-    s = Server(router)
+    s = Server(router, log_traffic=True)
+    s.logTraffic(True)
     s.serve()
 
 
