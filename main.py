@@ -10,16 +10,14 @@ from http.response_writer import *
         - Add Apache style logger
         - Handle Errors
             * Error page
-        - Html_loader 
-        - ResponseWrite.write_html()
-
 """
 
 
 def index(w: ResponseWriter):
-    return w.write("<h1>Hallo, World</h1>", OK, content_type="text/html")
+    return w.writeHtml("index", OK)
+    
 def about(w: ResponseWriter):
-    return w.write("<h1>Hallo, From About Page</h1>", OK, content_type="text/html")
+    return w.writeHtml("about", OK)
 
 def main():
     router = Router()
@@ -27,7 +25,6 @@ def main():
     router.GET("/about", about)
 
     s = Server(router)
-
     s.serve()
 
 

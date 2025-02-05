@@ -1,5 +1,6 @@
 from .status_codes import format_status_code
 from utils.time import get_formatted_time
+from html_loader import HtmlLoader
 
 
 class HeaderBuilder:
@@ -40,9 +41,11 @@ class HeaderBuilder:
 class ResponseWriter:
     header: HeaderBuilder
     body: str
+    html_loader: HtmlLoader
     
-    def __init__(self):
+    def __init__(self, html_loader: HtmlLoader):
         self.header = HeaderBuilder()
+        self.html_loader = html_loader
 
     def write(self, content: str, status_code: int, content_type: str ="text/plain"):
         self.header.set_status_code(status_code) 
@@ -52,6 +55,17 @@ class ResponseWriter:
         header_response = self.header.write_header()
 
         response = header_response + content
+        return response
+    
+    def writeHtml(self, html_file: str, status_code: int):
+        body = self.html_loader.html(html_file)
+        self.header.set_status_code(status_code) 
+        self.header.set_content_length(len(body))
+        self.header.set_content_type("text/html ISO-8859-1")
+        
+        header_response = self.header.write_header()
+
+        response = header_response + body
         return response
 
 

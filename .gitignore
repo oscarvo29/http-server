@@ -1,0 +1,21 @@
+
+# Logs
+logs/
+*.log
+
+# IDE / Editor settings
+.vscode/
+.idea/
+*.sublime-workspace
+
+
+.DS_Store
+
+# Byte-compiled / cached
+__pycache__/
+__pycache__/*
+*.py[cod]
+*$py.class
+*.pyc
+__pycache__/server.cpython-313.pyc
+http/__pycache__/response_writer.cpython-313.pyc

@@ -1,15 +1,19 @@
 from utils import request_utils
 from router import Router
 from http.response_writer import ResponseWriter
+from html_loader import HtmlLoader
 import socket
+import http.status_codes
 
 class Server:
     routes: dict
     addr: list[str, int]
+    html_loader: HtmlLoader
 
-    def __init__(self, routes: Router, addr = ("", 8080)):
+    def __init__(self, routes: Router, addr = ("", 8080), html_dir: str = "./html/"):
         self.addr = addr
         self.routes = routes.Routes()
+        self.html_loader = HtmlLoader(html_dir)
 
     def serve(self):
         if len(self.routes) <= 0:
@@ -26,13 +30,22 @@ class Server:
             req = f"{request_header["method"]}:{request_header["path"]}"
             print(request_header)
             if req in self.routes.keys():
-                print(self.routes[req])
                 fn = self.routes[req]
-                rw = ResponseWriter()
+                rw = ResponseWriter(self.html_loader)
 
-                res_header = fn(rw)
-                print(f"Response: {res_header}")
-                client_socket.send(res_header.encode())
+                response = fn(rw)
+                client_socket.send(response.encode())
+            elif request_header["path"] == "/favicon.ico":
+                pass
+            else:
+                if request_header["method"] == "GET":
+                    rw = ResponseWriter(self.html_loader)
+
+                    response = rw.writeHtml("404", status_code=404)
+                    client_socket.send(response.encode())
+
+
+
                
 
 
