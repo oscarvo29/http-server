@@ -1,7 +1,1 @@
-INFO:root:Input test
-INFO:root:Input test
-ERROR:root:error test
-CRITICAL:root:critical test
-INFO:root:Input test
-ERROR:root:error test
-CRITICAL:root:critical test
+127.0.0.1 - - [05/Feb/2025:13:42:29 +0000] "GET / HTTP/1.1" 200 OK 1200
